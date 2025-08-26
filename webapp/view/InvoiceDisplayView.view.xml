@@ -1,0 +1,148 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          xmlns:layout="sap.ui.layout"
+          xmlns:form="sap.ui.layout.form"
+          xmlns:core="sap.ui.core"
+          xmlns:f="sap.f"
+          controllerName="converted.invoicedisplayview.controller.InvoiceDisplayView"
+          displayBlock="true"
+          busyIndicatorDelay="0"
+          xmlns:commons="sap.ui.commons">
+  <Page title="Invoice Display" showHeader="false">
+    <customHeader>
+      <!-- Top Shell Toolbar (simulated) -->
+      <Toolbar id="shellToolbar" design="Solid">
+        <Button id="backButton" icon="sap-icon://nav-back" tooltip="Back" press="onActionBack" type="Transparent"/>
+        <!-- Corrected the sapLogo URL here -->
+        <Image id="sapLogo" src="https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_ui5.png" width="40px" height="20px" tooltip="SAP Logo"/>
+        <ToolbarSpacer/>
+        <Button id="favoriteButton" icon="sap-icon://favorite" tooltip="Add to Favorites" press="onActionAddFavorite" type="Transparent"/>
+        <Button id="shareButton" icon="sap-icon://action" tooltip="Share" press="onActionShare" type="Transparent"/>
+        <Button id="settingsButton" icon="sap-icon://action-settings" tooltip="Settings" press="onActionSettings" type="Transparent"/>
+        <Button id="helpButton" icon="sap-icon://sys-help" tooltip="Help" press="onActionHelp" type="Transparent"/>
+        <Button id="exitButton" text="Exit" tooltip="Exit Application" press="onActionExit" type="Transparent"/>
+      </Toolbar>
+    </customHeader>
+    <content>
+      <layout:VerticalLayout width="100%">
+        <layout:content>
+          <!-- Main Action Toolbar -->
+          <Toolbar id="mainActionToolbar" design="Solid">
+            <Button id="checkButton" icon="sap-icon://accept" tooltip="Check" press="onActionCheck"/>
+            <Select id="actionDropdown" tooltip="Select Action" change="onActionDropdownSelect" width="150px">
+              <core:Item text="-- Select --" key="0"/>
+              <core:Item text="Edit" key="EDIT"/>
+              <core:Item text="View History" key="HISTORY"/>
+            </Select>
+            <Button id="historyButton" icon="sap-icon://history" tooltip="Show History" press="onActionHistory"/>
+            <Button id="accountingButton" text="Accounting" icon="sap-icon://ledger" tooltip="Go to Accounting Document" press="onActionAccounting"/>
+            <Button id="billingDocumentsButton" text="Billing documents" icon="sap-icon://document" tooltip="Go to Billing Documents" press="onActionBillingDocuments"/>
+            <Button id="cancelButton" text="Cancel" icon="sap-icon://cancel" tooltip="Cancel Current Action" press="onActionCancel"/>
+            <ToolbarSpacer/>
+            <Button id="saveAsButton" icon="sap-icon://save" tooltip="Save As" press="onActionSaveAs"/>
+            <Button id="moveUpButton" icon="sap-icon://arrow-top" tooltip="Move Up" press="onActionMoveUp"/>
+            <Button id="moveDownButton" icon="sap-icon://arrow-bottom" tooltip="Move Down" press="onActionMoveDown"/>
+            <Button id="printButton" icon="sap-icon://print" tooltip="Print" press="onActionPrint"/>
+          </Toolbar>
+          <!-- Invoice Details Form Section -->
+          <form:SimpleForm id="invoiceDetailsForm" layout="ResponsiveGridLayout" columnsL="2" columnsM="2" columnsS="1" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanL="0" emptySpanM="0" emptySpanS="0" width="100%">
+            <form:content>
+              <Label text="Invoice (F2)"/>
+              <Select id="invoiceTypeDropdown" selectedKey="{invoiceHeader>/invoiceType}" width="150px">
+                <core:Item text="Invoice (F2)" key="F2"/>
+              </Select>
+              
+              <Label text="Invoice Number"/>
+              <Input id="invoiceNumberField" value="{invoiceHeader>/invoiceNumber}" width="150px" editable="false"/>
+
+              <Label text="Payer"/>
+              <Input id="payerIdField" value="{invoiceHeader>/payerId}" width="80px" editable="false"/>
+              
+              <Label text=""/>
+              <HBox>
+                  <Text id="payerDetailsText" text="{invoiceHeader>/payerDetails}" wrapping="true" tooltip="{invoiceHeader>/payerDetails}"/>
+                  <Button id="payerDetailsButton" icon="sap-icon://documents" tooltip="Show Payer Details" press="onActionShowPayerDetails" type="Transparent"/>
+              </HBox>
+
+              <Label text="Billing Date"/>
+              <Input id="billingDateField" value="{invoiceHeader>/billingDate}" width="100px" editable="false"/>
+
+              <Label text="Net Value"/>
+              <HBox>
+                <Input id="netValueField" value="{invoiceHeader>/netValue}" width="100px" editable="false"/>
+                <Text id="currencyUnitText" text="{invoiceHeader>/currency}"/>
+              </HBox>
+            </form:content>
+          </form:SimpleForm>
+          <!-- Table of Billing Items -->
+          <Toolbar id="tableActionToolbar" design="Transparent">
+            <Button id="deleteButton" icon="sap-icon://delete" tooltip="Delete Selected Items" press="onActionDeleteItems"/>
+            <ToolbarSpacer/>
+            <SearchField id="searchField" width="20%" search="onSearch"/>
+            <Button id="filterButton" icon="sap-icon://filter" tooltip="Filter" press="onActionFilter"/>
+            <Button id="sortButton" icon="sap-icon://sort" tooltip="Sort" press="onSortPress"/>
+            <Button id="exportToExcelButton" icon="sap-icon://excel" tooltip="Export to Excel" press="onActionExportToExcel"/>
+          </Toolbar>
+          <Table id="billingItemsTable" items="{ path: 'invoiceItems>/invoiceItems'}" width="100%" growing="true" growingThreshold="20" mode="MultiSelect">
+            <columns>
+              <Column id="itemCol" width="50px">
+                <header>
+                  <Text text="Item"/>
+                </header>
+              </Column>
+              <Column id="descriptionCol" width="200px">
+                <header>
+                  <Text text="Description"/>
+                </header>
+              </Column>
+              <Column id="billedQuantityCol" width="100px" hAlign="Right">
+                <header>
+                  <Text text="Billed Quantity"/>
+                </header>
+              </Column>
+              <Column id="suCol" width="50px">
+                <header>
+                  <Text text="SU"/>
+                </header>
+              </Column>
+              <Column id="netValueItemCol" width="100px" hAlign="Right">
+                <header>
+                  <Text text="Net value"/>
+                </header>
+              </Column>
+              <Column id="materialCol" width="80px">
+                <header>
+                  <Text text="Material"/>
+                </header>
+              </Column>
+              <Column id="taxAmountCol" width="100px" hAlign="Right" sortProperty="taxAmount" filterProperty="taxAmount">
+                <header>
+                  <Text text="Tax amount"/>
+                </header>
+              </Column>
+            </columns>
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <Link text="{invoiceItems>itemNumber}" press="onActionViewItem"/>
+                  <Link text="{invoiceItems>description}" press="onActionViewDescription"/>
+                  <Text text="{invoiceItems>billedQuantity}"/>
+                  <Link text="{invoiceItems>unit}"/>
+                  <Text text="{invoiceItems>netValue}"/>
+                  <Text text="{invoiceItems>materialId}"/>
+                  <Text text="{invoiceItems>taxAmount}"/>
+                </cells>
+              </ColumnListItem>
+            </items>
+          </Table>
+        </layout:content>
+      </layout:VerticalLayout>
+    </content>
+    <footer>
+      <Toolbar id="footerToolbar" design="Solid">
+        <ToolbarSpacer/>
+        <Button id="messagePopoverBtn" icon="sap-icon://message-popup" type="Transparent" press="handleMessagePopoverPress"/>
+      </Toolbar>
+    </footer>
+  </Page>
+</mvc:View>

@@ -1,0 +1,44 @@
+{
+  "invoiceItems": [
+    {
+      "itemSelected": true,
+      "itemNumber": "10",
+      "description": "Flatscreen LE 50 P",
+      "billedQuantity": "4",
+      "unit": "PC",
+      "netValue": "3240.00",
+      "materialId": "M-05",
+      "taxAmount": "486.00"
+    },
+    {
+      "itemSelected": false,
+      "itemNumber": "20",
+      "description": "Flatscreen MS 1460 P",
+      "billedQuantity": "3",
+      "unit": "PC",
+      "netValue": "4497.00",
+      "materialId": "M-06",
+      "taxAmount": "674.55"
+    },
+    {
+      "itemSelected": false,
+      "itemNumber": "30",
+      "description": "Flatscreen LE 64P",
+      "billedQuantity": "5",
+      "unit": "PC",
+      "netValue": "6110.00",
+      "materialId": "M-07",
+      "taxAmount": "916.50"
+    },
+    {
+      "itemSelected": false,
+      "itemNumber": "40",
+      "description": "Flatscreen MS 1575P",
+      "billedQuantity": "3",
+      "unit": "PC",
+      "netValue": "6144.00",
+      "materialId": "M-08",
+      "taxAmount": "921.60"
+    }
+  ]
+}

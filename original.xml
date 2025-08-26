@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebDynpro xmlns="http://www.sap.com/wd/webdynpro">
+  <View name="InvoiceDisplayView">
+    <Title>Invoice (F2) 90005190 (F2) Display: Overview of Billing Items</Title>
+
+    <!-- Top Shell Toolbar (simulated) -->
+    <Toolbar id="ShellToolbar" design="Header">
+      <ToolbarElement>
+        <Button id="BackButton" imageSource="~Icon/back" tooltip="Back" onAction="onActionBack" design="Transparent"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Image id="SAPLogo" source="~sap/public/bc/webdynpro/mimes/sap_logo.png" width="40px" height="20px" tooltip="SAP Logo"/>
+      </ToolbarElement>
+      <ToolbarSpacer id="ShellSpacer"/>
+      <ToolbarElement>
+        <Button id="FavoriteButton" imageSource="~Icon/favorite" tooltip="Add to Favorites" design="Transparent" onAction="onActionAddFavorite"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="ShareButton" imageSource="~Icon/share" tooltip="Share" design="Transparent" onAction="onActionShare"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="SettingsButton" imageSource="~Icon/settings" tooltip="Settings" design="Transparent" onAction="onActionSettings"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="HelpButton" imageSource="~Icon/help" tooltip="Help" design="Transparent" onAction="onActionHelp"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="ExitButton" text="Exit" tooltip="Exit Application" onAction="onActionExit" design="Transparent"/>
+      </ToolbarElement>
+    </Toolbar>
+
+    <!-- Main Action Toolbar -->
+    <Toolbar id="MainActionToolbar" design="Standard">
+      <ToolbarElement>
+        <Button id="CheckButton" imageSource="~Icon/check_green" tooltip="Check" onAction="onActionCheck"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <DropDownByIndex id="ActionDropdown" tooltip="Select Action" onSelect="onActionDropdownSelect" width="150px">
+          <Items>
+            <Item text="-- Select --" key="0"/>
+            <!-- Placeholder items for an empty dropdown -->
+            <Item text="Edit" key="EDIT"/>
+            <Item text="View History" key="HISTORY"/>
+          </Items>
+        </DropDownByIndex>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="HistoryButton" imageSource="~Icon/history" tooltip="Show History" onAction="onActionHistory"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="AccountingButton" text="Accounting" imageSource="~Icon/ledger" tooltip="Go to Accounting Document" onAction="onActionAccounting"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="BillingDocumentsButton" text="Billing documents" imageSource="~Icon/bill" tooltip="Go to Billing Documents" onAction="onActionBillingDocuments"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="CancelButton" text="Cancel" imageSource="~Icon/cancel" tooltip="Cancel Current Action" onAction="onActionCancel"/>
+      </ToolbarElement>
+      <ToolbarSpacer id="MainActionSpacer"/>
+      <ToolbarElement>
+        <Button id="SaveAsButton" imageSource="~Icon/save_as" tooltip="Save As" onAction="onActionSaveAs"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="MoveUpButton" imageSource="~Icon/up" tooltip="Move Up" onAction="onActionMoveUp"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="MoveDownButton" imageSource="~Icon/down" tooltip="Move Down" onAction="onActionMoveDown"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="PrintButton" imageSource="~Icon/print" tooltip="Print" onAction="onActionPrint"/>
+      </ToolbarElement>
+    </Toolbar>
+
+    <!-- Invoice Details Form Section -->
+    <FormContainer id="InvoiceDetailsForm" colCount="4" width="100%">
+      <!-- Row 1 -->
+      <FormElement id="InvoiceTypeElement">
+        <Label text="Invoice (F2)"/>
+        <DropDownByIndex id="InvoiceTypeDropdown" selectedKey="F2" width="150px">
+          <Items>
+            <Item text="Invoice (F2)" key="F2"/>
+            <!-- Add other possible invoice types if known -->
+          </Items>
+        </DropDownByIndex>
+      </FormElement>
+      <FormElement id="InvoiceNumberElement">
+        <InputField id="InvoiceNumberField" value="{/invoiceHeader/invoiceNumber}" width="150px" readOnly="true"/>
+      </FormElement>
+      <FormElement id="NetValueLabelElement">
+        <Label text="Net Value"/>
+      </FormElement>
+      <FormElement id="NetValueFieldElement">
+        <FlowLayout id="NetValueDisplayLayout">
+          <InputField id="NetValueField" value="{/invoiceHeader/netValue}" width="100px" readOnly="true"/>
+          <TextView id="CurrencyUnitText" text="DEM"/>
+        </FlowLayout>
+      </FormElement>
+      
+      <!-- Row 2 -->
+      <FormElement id="PayerLabelElement">
+        <Label text="Payer"/>
+      </FormElement>
+      <FormElement id="PayerIdFieldElement">
+        <InputField id="PayerIdField" value="{/invoiceHeader/payerId}" width="80px" readOnly="true"/>
+      </FormElement>
+      <FormElement id="PayerDetailsDisplayElement" colSpan="2">
+        <FlowLayout id="PayerDetailsLayout">
+          <TextView id="PayerDetailsText" text="{/invoiceHeader/payerDetails}" width="300px" wrapping="false" tooltip="Omega Soft-Hardware Markt / Gustav-Jung-Strasse 425 / ..."/>
+          <Button id="PayerDetailsButton" imageSource="~Icon/document_search" tooltip="Show Payer Details" design="Transparent" onAction="onActionShowPayerDetails"/>
+        </FlowLayout>
+      </FormElement>
+
+      <!-- Row 3 -->
+      <FormElement id="BillingDateLabelElement">
+        <Label text="Billing Date"/>
+      </FormElement>
+      <FormElement id="BillingDateFieldElement">
+        <InputField id="BillingDateField" value="{/invoiceHeader/billingDate}" width="100px" readOnly="true"/>
+      </FormElement>
+      <FormElement id="FillerElement" colSpan="2">
+        <TextView text=""/> <!-- Placeholder to maintain layout -->
+      </FormElement>
+    </FormContainer>
+
+    <!-- Table of Billing Items -->
+    <Toolbar id="TableActionToolbar" design="Transparent">
+      <ToolbarElement>
+        <Button id="DeleteButton" imageSource="~Icon/delete" tooltip="Delete Selected Items" onAction="onActionDeleteItems"/>
+      </ToolbarElement>
+    </Toolbar>
+    <Table id="BillingItemsTable" dataSource="{/invoiceItems}" visibleRowCount="10" selectionMode="multiSelect" width="100%">
+      <Columns>
+        <TableColumn id="SelectionCol" width="30px">
+          <Header>
+            <TextView text=""/>
+          </Header>
+          <CellEditor>
+            <CheckBox id="ItemSelectionCheckbox" selectionState="{itemSelected}"/>
+          </CellEditor>
+        </TableColumn>
+        <TableColumn id="ItemCol" width="50px">
+          <Header>
+            <TextView text="Item"/>
+          </Header>
+          <CellEditor>
+            <LinkToAction id="ItemIdLink" text="{itemNumber}" tooltip="View Item Details" onAction="onActionViewItem"/>
+          </CellEditor>
+        </TableColumn>
+        <TableColumn id="DescriptionCol" width="200px">
+          <Header>
+            <TextView text="Description"/>
+          </Header>
+          <CellEditor>
+            <LinkToAction id="ItemDescriptionLink" text="{description}" tooltip="View Description Details" onAction="onActionViewDescription"/>
+          </CellEditor>
+        </TableColumn>
+        <TableColumn id="BilledQuantityCol" width="100px" hAlign="Right">
+          <Header>
+            <TextView text="Billed Quantity"/>
+          </Header>
+          <CellEditor>
+            <TextView id="BilledQuantityText" text="{billedQuantity}"/>
+          </CellEditor>
+        </TableColumn>
+        <TableColumn id="SUCol" width="50px">
+          <Header>
+            <TextView text="SU"/>
+          </Header>
+          <CellEditor>
+            <LinkToAction id="UnitLink" text="{unit}" tooltip="View Unit Details" onAction="onActionViewUnit"/>
+          </CellEditor>
+        </TableColumn>
+        <TableColumn id="NetValueItemCol" width="100px" hAlign="Right">
+          <Header>
+            <TextView text="Net value"/>
+          </Header>
+          <CellEditor>
+            <TextView id="NetValueItemText" text="{netValue}"/>
+          </CellEditor>
+        </TableColumn>
+        <TableColumn id="MaterialCol" width="80px">
+          <Header>
+            <TextView text="Material"/>
+          </Header>
+          <CellEditor>
+            <TextView id="MaterialText" text="{materialId}"/>
+          </CellEditor>
+        </TableColumn>
+        <TableColumn id="TaxAmountCol" width="100px" hAlign="Right" sortable="true" filterable="true">
+          <Header>
+            <TextView text="Tax amount"/>
+          </Header>
+          <CellEditor>
+            <TextView id="TaxAmountText" text="{taxAmount}"/>
+          </CellEditor>
+        </TableColumn>
+      </Columns>
+    </Table>
+
+    <!-- Footer Toolbar -->
+    <Toolbar id="FooterToolbar" design="Transparent">
+      <ToolbarElement>
+        <Button id="FilterButton" imageSource="~Icon/filter" tooltip="Filter Table Data" onAction="onActionFilter"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="LayoutButton" imageSource="~Icon/table_layout" tooltip="Change Table Layout" onAction="onActionChangeLayout"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="TableSettingsButton" imageSource="~Icon/settings_table" tooltip="Table Settings" onAction="onActionTableSettings"/>
+      </ToolbarElement>
+      <ToolbarElement>
+        <Button id="ExportToExcelButton" imageSource="~Icon/excel" tooltip="Export to Microsoft Excel" onAction="onActionExportToExcel"/>
+      </ToolbarElement>
+    </Toolbar>
+
+  </View>
+  <Controller name="InvoiceDisplayViewController">
+    <Methods>
+      <!-- Shell Toolbar Actions -->
+      <Method name="onActionBack"/>
+      <Method name="onActionAddFavorite"/>
+      <Method name="onActionShare"/>
+      <Method name="onActionSettings"/>
+      <Method name="onActionHelp"/>
+      <Method name="onActionExit"/>
+
+      <!-- Main Action Toolbar Actions -->
+      <Method name="onActionCheck"/>
+      <Method name="onActionDropdownSelect">
+        <Parameters>
+          <Parameter name="key" type="string"/>
+        </Parameters>
+      </Method>
+      <Method name="onActionHistory"/>
+      <Method name="onActionAccounting"/>
+      <Method name="onActionBillingDocuments"/>
+      <Method name="onActionCancel"/>
+      <Method name="onActionSaveAs"/>
+      <Method name="onActionMoveUp"/>
+      <Method name="onActionMoveDown"/>
+      <Method name="onActionPrint"/>
+
+      <!-- Form Actions -->
+      <Method name="onActionShowPayerDetails"/>
+
+      <!-- Table Actions -->
+      <Method name="onActionDeleteItems"/>
+      <Method name="onActionViewItem">
+        <Parameters>
+          <Parameter name="path" type="string"/>
+        </Parameters>
+      </Method>
+      <Method name="onActionViewDescription">
+        <Parameters>
+          <Parameter name="path" type="string"/>
+        </Parameters>
+      </Method>
+      <Method name="onActionViewUnit">
+        <Parameters>
+          <Parameter name="path" type="string"/>
+        </Parameters>
+      </Method>
+
+      <!-- Footer Toolbar Actions -->
+      <Method name="onActionFilter"/>
+      <Method name="onActionChangeLayout"/>
+      <Method name="onActionTableSettings"/>
+      <Method name="onActionExportToExcel"/>
+    </Methods>
+  </Controller>
+</WebDynpro>
